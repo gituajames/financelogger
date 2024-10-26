@@ -14,6 +14,22 @@ from finlogger.forms import UploadMpesaMessageForm
 def index(request):
     recent_transactions = Transaction.objects.order_by('-date_of_transaction')[:5]
 
+    groups = Transaction.objects.values(
+        'category_of_the_transaction'
+    ).annotate(totals_=Sum('amount'))
+
+    category = []
+    total = []
+
+    for key in groups:
+        print(key['category_of_the_transaction'])
+        category.append(key['category_of_the_transaction'])
+        total.append(key['totals_'])
+        for key1, val in key.items():
+            print(key1, ': ', val)
+            # print(val)
+    print(groups)
+
     # distill all the data for graphing
     # categorize by type of transaction
     labels = ['paid', 'sent', 'received']
@@ -36,6 +52,10 @@ def index(request):
         # data
         'labels' : labels,
         'data' : data,
+
+        # categories
+        'category' : category,
+        'total' : total
     }
     return render (request, 'index.html', context)
 

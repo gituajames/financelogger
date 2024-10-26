@@ -41,7 +41,7 @@
         <div class="row">
             <!-- graphs -->
             <div class="col">
-                <p>1 of 1</p>
+                
                 <canvas id="mychart"></canvas>
             </div>
 
@@ -66,6 +66,7 @@
             data: {
                 labels : {{ labels | safe }},
                 datasets: [{
+                    label: 'monies out',
                     data: {{ data | safe }},
                     borderWidth: 1
                 }]
@@ -83,9 +84,9 @@
         new Chart(ctx1, {
             type: 'bar',
             data: {
-                labels : {{ labels | safe }},
+                labels : {{ category | safe }},
                 datasets: [{
-                    data: {{ data | safe }},
+                    data: {{ total | safe }},
                     borderWidth: 1
                 }]
             },
@@ -146,6 +147,10 @@
 
 
     {% endif %}
+
+    {% for group in groups %}
+        <p>{{ group }}</p>
+    {% endfor %}
 </body>
 </html>
 
