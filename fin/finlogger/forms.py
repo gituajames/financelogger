@@ -1,4 +1,4 @@
-from django import forms
+from django.forms import DateTimeField, widgets
 from django.forms import ModelForm
 
 from .models import Transaction, TransactionCost
@@ -14,7 +14,12 @@ class UploadMpesaMessageForm(ModelForm):
         #     'location_description',
         #     'category_of_the_transaction',
         #     'description_of_the_transaction',
-        #     'ammount',
+        #     'amount',
         #     'name_of_recipients',
         #     'type_of_transaction',
+        #     'transaction_cost',
         # ]
+
+        widgets = {
+            'date_of_transaction' : widgets.DateTimeInput(attrs={'type':'date'})
+        }
