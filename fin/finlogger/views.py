@@ -25,27 +25,35 @@ def index(request):
         print(key['category_of_the_transaction'])
         category.append(key['category_of_the_transaction'])
         total.append(key['totals_'])
-        for key1, val in key.items():
-            print(key1, ': ', val)
+        # for key1, val in key.items():
+            # print(key1, ': ', val)
             # print(val)
     print(groups)
 
     # distill all the data for graphing
     # categorize by type of transaction
-    labels = ['paid', 'sent', 'received']
+    money_in_and_out_categories = Transaction.objects.values(
+        'type_of_transaction'
+    ).annotate(total_money=Sum('amount'))
+
+    labels = []
     data = []
 
-    paid_sum = Transaction.objects.filter(type_of_transaction='paid').aggregate(
-        sum_paid = Sum('amount'))['sum_paid']
-    data.append(paid_sum)
+    for key in money_in_and_out_categories:
+        labels.append(key['type_of_transaction'])
+        data.append(key['total_money'])
 
-    sent_sum = Transaction.objects.filter(type_of_transaction='sent').aggregate(
-        sum_sent = Sum('amount'))['sum_sent']
-    data.append(sent_sum)
+    # paid_sum = Transaction.objects.filter(type_of_transaction='paid').aggregate(
+    #     sum_paid = Sum('amount'))['sum_paid']
+    # data.append(paid_sum)
 
-    received_sum = Transaction.objects.filter(type_of_transaction='received').aggregate(
-        sum_received = Sum('amount'))['sum_received']
-    data.append(received_sum)
+    # sent_sum = Transaction.objects.filter(type_of_transaction='sent').aggregate(
+    #     sum_sent = Sum('amount'))['sum_sent']
+    # data.append(sent_sum)
+
+    # received_sum = Transaction.objects.filter(type_of_transaction='received').aggregate(
+    #     sum_received = Sum('amount'))['sum_received']
+    # data.append(received_sum)
 
     context = {
         'recent_transactions' : recent_transactions,
