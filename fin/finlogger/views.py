@@ -12,7 +12,7 @@ from finlogger.forms import UploadMpesaMessageForm
 
 
 def index(request):
-    recent_transactions = Transaction.objects.order_by('-date_of_transaction')[:5]
+    recent_transactions = Transaction.objects.order_by('-date_of_mpesa_msg_modify')[:5]
 
     groups = Transaction.objects.values(
         'category_of_the_transaction'

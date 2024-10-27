@@ -5,6 +5,15 @@ from django.db import models
 
 # transactions - >
 class Transaction(models.Model):
+
+
+    TYPE_OF_TRANSACTION_CHOICES = {
+        "paid" : "Paid",
+        "received" : "Received",
+        "sent" : "Sent"
+    }
+    date_of_mpesa_msg_upload = models.DateTimeField(auto_now_add = True)
+    date_of_mpesa_msg_modify = models.DateTimeField(auto_now = True)
     date_of_transaction = models.DateTimeField() # 09/10/12
     transaction_message = models.CharField(max_length=1000) # mpesa message
     geolocation_of_the_transaction = models.CharField(max_length=200) # lat lon if possible
@@ -14,7 +23,7 @@ class Transaction(models.Model):
     description_of_the_transaction = models.TextField() # paid for services, prodct etc
     amount = models.IntegerField(default=0) # amount of cash used
     name_of_recipients = models.CharField(max_length=50) # name of recipients
-    type_of_transaction = models.CharField(max_length=20) # paid, sent or received
+    type_of_transaction = models.CharField(max_length=20, choices=TYPE_OF_TRANSACTION_CHOICES) # paid, sent or received
     transaction_cost  = models.IntegerField(default=0) # actual transaction cost
 
     def __str__(self):
