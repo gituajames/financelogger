@@ -16,7 +16,7 @@ def index(request):
 
     groups = Transaction.objects.values(
         'category_of_the_transaction'
-    ).annotate(totals_=Sum('amount'))
+    ).annotate(totals_=Sum('amount')).order_by('totals_')
 
     category = []
     total = []
@@ -34,7 +34,7 @@ def index(request):
     # categorize by type of transaction
     money_in_and_out_categories = Transaction.objects.values(
         'type_of_transaction'
-    ).annotate(total_money=Sum('amount'))
+    ).annotate(total_money=Sum('amount')).order_by('total_money')
 
     labels = []
     data = []
