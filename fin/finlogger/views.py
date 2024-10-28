@@ -28,7 +28,7 @@ def index(request):
         # for key1, val in key.items():
             # print(key1, ': ', val)
             # print(val)
-    print(groups)
+    # print(groups)
 
     # distill all the data for graphing
     # categorize by type of transaction
@@ -63,7 +63,7 @@ def index(request):
 
         # categories
         'category' : category,
-        'total' : total
+        'total' : total,
     }
     return render (request, 'index.html', context)
 
