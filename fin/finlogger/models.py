@@ -10,9 +10,9 @@ class Transaction(models.Model):
     TYPE_OF_TRANSACTION_CHOICES = {
         "paid" : "Paid",
         "received" : "Received",
-        "sent" : "Sent"
+        "sent" : "Sent",
     }
-    
+
     date_of_mpesa_msg_upload = models.DateTimeField(auto_now_add = True)
     date_of_mpesa_msg_modify = models.DateTimeField(auto_now = True)
     date_of_transaction = models.DateTimeField() # 09/10/12
