@@ -1,7 +1,7 @@
 from django.urls import path
-from . import views
+from .views import index, uploadmpesamessage
 
 urlpatterns = [
-    path('', views.index, name="index"),
-    path('upload/', views.uploadmpesamessage, name="uploadmpesamessage")
+    path('', index, name="index"),
+    path('upload/', uploadmpesamessage, name="uploadmpesamessage")
 ]

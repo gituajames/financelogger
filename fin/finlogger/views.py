@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
 
-from django.db.models import Count, Sum
 
 from .models import Transaction
+from django.db.models import Count, Sum
 
 # forms
 from finlogger.forms import UploadMpesaMessageForm
