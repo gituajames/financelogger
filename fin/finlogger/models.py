@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ModelForm
 
 # upload an mpesa message extract bellow info and save to db
 # send email notifications of reports
@@ -11,7 +12,7 @@ TYPE_OF_THE_TRANSACTION_CHOICES = {
         "sent" : "Sent",
     }
 
-    
+
 class Transaction(models.Model):
     date_of_transaction = models.DateTimeField() # 09/10/12
     transaction_message = models.CharField(max_length=1000) # mpesa message
