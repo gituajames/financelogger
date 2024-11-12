@@ -22,7 +22,7 @@ class UploadMpesaMessageForm(ModelForm):
         # ]
 
         widgets = {
-            'date_of_transaction' : forms.DateTimeInput(
+            'date_of_transaction' : widgets.DateTimeInput(
                 
                 attrs={'type':'date',
                 }),
