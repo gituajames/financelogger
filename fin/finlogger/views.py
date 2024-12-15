@@ -9,6 +9,10 @@ from django.db.models import Count, Sum
 # forms
 from finlogger.forms import UploadMpesaMessageForm
 
+# utils
+from .utils import extract_mpesa_details
+from datetime import datetime
+
 
 
 def index(request):
@@ -72,12 +76,40 @@ def uploadmpesamessage(request):
     if request.method == 'POST':
         form = UploadMpesaMessageForm(request.POST)
         print(form.is_valid())
-        if form.is_valid():
-            print('valid')
-            form.save()
-            messages.success(request, ('msg saved'))
+        mpesa_msg = request.POST['transaction_message']
+        mpesa_details = extract_mpesa_details(mpesa_msg)
+
+        # date_of_transaction
+        amount = mpesa_details['Amount']
+        type_of_transaction = mpesa_details['type_of_transaction']
+        if mpesa_details['type_of_transaction'] == 'received':
+            name_of_recipients = mpesa_details['Sender']
+            transaction_cost = 0
         else:
-            messages.error(request, 'Error saving msg')
+            name_of_recipients = mpesa_details['Recipient']
+            transaction_cost = mpesa_details['Transaction Cost']
+        transaction_message = mpesa_msg
+
+        datetimestr = mpesa_details['Date']+ ' ' +mpesa_details['Time']
+        print(datetimestr)
+        date_format = '%d/%m/%y %H:%M %p'
+        date_obj = datetime.strptime(datetimestr, date_format)
+
+        my_transaction = Transaction(
+            date_of_transaction =  date_obj,
+            amount = float(amount),
+            type_of_transaction = type_of_transaction,
+            name_of_recipients = name_of_recipients,
+            transaction_cost = transaction_cost,
+            transaction_message = transaction_message,
+
+            geolocation_of_the_transaction = request.POST['geolocation_of_the_transaction'],
+            location_description = request.POST['location_description'],
+            category_of_the_transaction = request.POST['category_of_the_transaction'],
+            description_of_the_transaction = request.POST['description_of_the_transaction'],
+        )
+        my_transaction.save()
+        messages.success(request, ('msg saved'))
         return redirect('index')
     else:
         form = UploadMpesaMessageForm()
