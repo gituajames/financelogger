@@ -59,6 +59,9 @@ def index(request):
     #     sum_received = Sum('amount'))['sum_received']
     # data.append(received_sum)
 
+    # sum of all transaction costs
+    total_transaction_costs = Transaction.objects.aggregate(total=Sum('transaction_cost'))['total']
+
     context = {
         'recent_transactions' : recent_transactions,
         # data
@@ -68,6 +71,9 @@ def index(request):
         # categories
         'category' : category,
         'total' : total,
+
+        # sum of all transaction costs
+        'total_transaction_costs' : total_transaction_costs
     }
     return render (request, 'index.html', context)
 
