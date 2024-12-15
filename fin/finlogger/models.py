@@ -6,11 +6,11 @@ from django.forms import ModelForm
 
 # transactions - >
 
-TYPE_OF_THE_TRANSACTION_CHOICES = {
-        "paid" : "Paid",
-        "received" : "Received",
-        "sent" : "Sent",
-    }
+# TYPE_OF_THE_TRANSACTION_CHOICES = {
+#         "paid" : "Paid",
+#         "received" : "Received",
+#         "sent" : "Sent",
+#     }
 
 
 class Transaction(models.Model):
@@ -18,7 +18,7 @@ class Transaction(models.Model):
     # transaction_id = models.CharField(max_length=100)
     date_of_transaction = models.DateTimeField() # 09/10/12
     amount = models.FloatField(default=0) # amount of cash used
-    type_of_transaction = models.CharField(max_length=200, choices=TYPE_OF_THE_TRANSACTION_CHOICES) # paid, sent or received
+    type_of_transaction = models.CharField(max_length=200) # paid, sent or received
     name_of_recipients = models.CharField(max_length=50) # name of recipients
     transaction_cost  = models.FloatField(default=0) # actual transaction cost
 
