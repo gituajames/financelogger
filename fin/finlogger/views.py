@@ -5,6 +5,7 @@ from django.contrib import messages
 
 from .models import Transaction
 from django.db.models import Count, Sum
+from django.db.models.functions import TruncDate
 
 # forms
 from finlogger.forms import UploadMpesaMessageForm
@@ -26,7 +27,7 @@ def index(request):
     total = []
 
     for key in groups:
-        print(key['category_of_the_transaction'])
+        
         category.append(key['category_of_the_transaction'])
         total.append(key['totals_'])
         # for key1, val in key.items():
@@ -62,6 +63,13 @@ def index(request):
     # sum of all transaction costs
     total_transaction_costs = Transaction.objects.aggregate(total=Sum('transaction_cost'))['total']
 
+    # daily totals
+    daily_totals = Transaction.objects.annotate(
+        day=TruncDate('date_of_transaction')
+    ).values('day').annotate(
+        total=Sum('amount')
+    ).order_by('day')
+
     context = {
         'recent_transactions' : recent_transactions,
         # data
@@ -73,7 +81,10 @@ def index(request):
         'total' : total,
 
         # sum of all transaction costs
-        'total_transaction_costs' : total_transaction_costs
+        'total_transaction_costs' : total_transaction_costs,
+
+        # daily totals
+        'daily_totals' : daily_totals
     }
     return render (request, 'index.html', context)
 
@@ -81,7 +92,7 @@ def index(request):
 def uploadmpesamessage(request):
     if request.method == 'POST':
         form = UploadMpesaMessageForm(request.POST)
-        print(form.is_valid())
+        
         mpesa_msg = request.POST['transaction_message']
         mpesa_details = extract_mpesa_details(mpesa_msg)
 
@@ -97,7 +108,7 @@ def uploadmpesamessage(request):
         transaction_message = mpesa_msg
 
         datetimestr = mpesa_details['Date']+ ' ' +mpesa_details['Time']
-        print(datetimestr)
+        
         date_format = '%d/%m/%y %H:%M %p'
         date_obj = datetime.strptime(datetimestr, date_format)
 
