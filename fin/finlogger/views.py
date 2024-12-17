@@ -68,7 +68,7 @@ def index(request):
         day=TruncDate('date_of_transaction')
     ).values('day').annotate(
         total=Sum('amount')
-    ).order_by('day')
+    ).order_by('-day')
 
     context = {
         'recent_transactions' : recent_transactions,
