@@ -19,7 +19,7 @@ from datetime import datetime
 def index(request):
     recent_transactions = Transaction.objects.order_by('-date_of_mpesa_msg_modify')[:5]
 
-    groups = Transaction.objects.values(
+    groups = Transaction.objects.exclude(type_of_transaction='received').values(
         'category_of_the_transaction'
     ).annotate(totals_=Sum('amount')).order_by('totals_')
 
@@ -68,7 +68,7 @@ def index(request):
         day=TruncDate('date_of_transaction')
     ).values('day').annotate(
         total=Sum('amount')
-    ).order_by('-day')
+    ).order_by('-day')[:5]
 
     context = {
         'recent_transactions' : recent_transactions,
