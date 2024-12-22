@@ -37,7 +37,8 @@ def index(request):
 
     # distill all the data for graphing
     # categorize by type of transaction
-    money_in_and_out_categories = Transaction.objects.values(
+    money_in_and_out_categories = Transaction.objects.exclude(
+        type_of_transaction='received').values(
         'type_of_transaction'
     ).annotate(total_money=Sum('amount')).order_by('total_money')
 
@@ -63,6 +64,20 @@ def index(request):
     # sum of all transaction costs
     total_transaction_costs = Transaction.objects.aggregate(total=Sum('transaction_cost'))['total']
 
+    total_received_amount = Transaction.objects.filter(
+        type_of_transaction='received'
+    ).aggregate(total_sum_received=Sum('amount'))['total_sum_received']
+
+    total_sent_amount = Transaction.objects.filter(
+        type_of_transaction='sent'
+    ).aggregate(total_sent_amount=Sum('amount'))['total_sent_amount']
+
+    total_paid_amount = Transaction.objects.filter(
+        type_of_transaction='paid'
+    ).aggregate(total_paid_amount=Sum('amount'))['total_paid_amount']
+
+    monies_out = total_sent_amount + total_paid_amount
+
     # daily totals
     daily_totals = Transaction.objects.annotate(
         day=TruncDate('date_of_transaction')
@@ -84,7 +99,11 @@ def index(request):
         'total_transaction_costs' : total_transaction_costs,
 
         # daily totals
-        'daily_totals' : daily_totals
+        'daily_totals' : daily_totals,
+
+        # total sum received
+        'total_received_amount' : total_received_amount,
+        'monies_out' : monies_out
     }
     return render (request, 'index.html', context)
 
