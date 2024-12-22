@@ -309,8 +309,9 @@
         <thead>
           <tr>
             <th>Date</th>
-            {% comment %} <th>Description</th> {% endcomment %}
-            <th>Amount</th>
+            <th>In</th>
+            <th>Out</th>
+            <th>Total</th>
             {% comment %} <th>Status</th> {% endcomment %}
           </tr>
         </thead>
@@ -319,7 +320,8 @@
           <tr>
             <td>{{ day_total.day }}</td>
             <td>kes. {{ day_total.total }}</td>
-            {% comment %} <td><span class="status success">Completed</span></td> {% endcomment %}
+            <td>kes. {{ day_total.total }}</td>
+            <td><span class="status success">kes. {{ day_total.total|add:day_total.total }}</span></td>
           {% endfor %}
         </tbody>
       </table>
