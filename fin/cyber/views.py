@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
+from django.db.models import Count, Sum
+
 from .models import Service
 
 from .forms import ServiceForm
@@ -24,9 +26,12 @@ def index(request):
 
 
 def home(request):
+    total_sales = Service.objects.all().aggregate(total_sales=Sum('price'))['total_sales']
+    print(total_sales)
     all_services = Service.objects.order_by('-date')[:8]
     context = {
-        'all_data': all_services
+        'total_sales': total_sales,
+        'all_data': all_services,
     }
     return render(request, 'home.html', context=context)
 
