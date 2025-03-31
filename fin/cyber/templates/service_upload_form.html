@@ -79,11 +79,11 @@
       </div>
       <div class="w3-bar-block">
         <span class="w3-bar-item w3-padding w3-small w3-opacity" style="margin-top:8px"> MAIN NAVIGATION </span>
-        <a href="cyber/home" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
+        <a href="/cyber/cyber_dash_summury" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
           <i class="fa fa-fw fa-bar-chart"></i>&nbsp; Dashboard </a>
         <a href="./icons.html" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
           <i class="fa fa-fw fa-fire"></i>&nbsp; UI Icons </a>
-        <a href="cyber/index" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
+        <a href="/cyber/service_upload_form" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
           <i class="fa fa-fw fa-edit"></i>&nbsp; Forms </a>
         <a href="./tables.html" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
           <i class="fa fa-fw fa-table"></i>&nbsp; Tables </a>
@@ -232,31 +232,36 @@
         <div class="w3-white w3-round w3-margin-bottom w3-border" style="">
           <header class="w3-padding-large w3-large w3-border-bottom" style="font-weight: 500">SERVICE UPLOAD FORM</header>
           <div class="w3-padding-large">
-            <form>
+            {% load crispy_forms_tags %}
+            <form method="post">
+              {% csrf_token %}
+              
               <div class="w3-row w3-margin-bottom">
-                <label for="input-1" class="w3-col l2">Service</label>
+                
+                <!-- <label for="input-1" class="w3-col l2">Service</label> -->
                 <div class="w3-col l10">
-                  <input type="text" class="w3-input w3-border w3-round-xxlarge" placeholder="Enter a service eg printing">
+                  {{ form | crispy }}
+                  <!-- <input type="text" class="w3-input w3-border w3-round-xxlarge" placeholder="Enter a service eg printing"> -->
                 </div>
               </div>
-              <div class="w3-row w3-margin-bottom">
+              <!-- <div class="w3-row w3-margin-bottom">
                 <label for="input-1" class="w3-col l2">Price</label>
                 <div class="w3-col l10">
                   <input type="text" class="w3-input w3-border w3-round-xxlarge" placeholder="Enter total price of the service offered">
                 </div>
-              </div>
-              <div class="w3-row w3-margin-bottom">
+              </div> -->
+              <!-- <div class="w3-row w3-margin-bottom">
                 <label for="input-1" class="w3-col l2">Count</label>
                 <div class="w3-col l10">
                   <input type="text" class="w3-input w3-border w3-round-xxlarge" placeholder="Enter count of the service eg number of copies">
                 </div>
-              </div>
-              <div class="w3-row w3-margin-bottom">
+              </div> -->
+              <!-- <div class="w3-row w3-margin-bottom">
                 <label for="input-1" class="w3-col l2">Description</label>
                 <div class="w3-col l10">
                   <input type="text" class="w3-input w3-border w3-round-xxlarge" placeholder="descripe the service offered">
                 </div>
-              </div>
+              </div> -->
               <!-- <div class="w3-row w3-margin-bottom">
                 <label for="input-1" class="w3-col l2">Confirm Password</label>
                 <div class="w3-col l10">
@@ -273,7 +278,7 @@
               <div class="w3-row w3-margin-bottom">
                 <div class="w3-col l2">&nbsp;</div>
                 <div class="w3-col l10">
-                  <button type="button" class="w3-button w3-primary w3-round-xxlarge"><i class="fa fa-fw fa-lock"></i> Submit</button>
+                  <button type="submit" class="w3-button w3-primary w3-round-xxlarge"><i class="fa fa-fw fa-lock"></i> Submit</button>
                 </div>
               </div>
             </form>

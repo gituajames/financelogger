@@ -80,11 +80,11 @@
       </div>
       <div class="w3-bar-block">
         <span class="w3-bar-item w3-padding w3-small w3-opacity" style="margin-top:8px"> MAIN NAVIGATION </span>
-        <a href="/cyber/home" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
+        <a href="/cyber/cyber_dash_summury" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
           <i class="fa fa-fw fa-bar-chart"></i>&nbsp; Dashboard </a>
         <a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
           <i class="fa fa-fw fa-fire"></i>&nbsp; UI Icons </a>
-        <a href="/cyber/index" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
+        <a href="/cyber/service_upload_form" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
           <i class="fa fa-fw fa-edit"></i>&nbsp; Service Forms </a>
         <a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
           <i class="fa fa-fw fa-table"></i>&nbsp; Tables </a>
@@ -107,22 +107,33 @@
       <div style="padding:16px 32px">
         <div class="w3-white w3-round w3-margin-bottom w3-border" style="">
           <div class="w3-row">
+
             <div class="w3-col l3 w3-container w3-border-right">
               <div class="w3-padding">
-                <h5>{{ total_sales }} <span class="w3-right"><i class="fa fa-fw fa-shopping-cart"></i></span></h5>
-                <div class="progress w3-light" style="height:3px;">
-                  <div class="progress-bar w3-info" style="width:55%;height:3px;"></div>
-                </div>
-                <p>Total sales <span class="w3-right">  </span></p>
-              </div>
-            </div>
-            <div class="w3-col l3 w3-container w3-border-right">
-              <div class="w3-padding">
-                <h5>8323 <span class="w3-right"><i class="fa fa-fw fa-usd"></i></span></h5>
+                <h5> {{ todays_sum | floatformat:"2g" }}<span class="w3-right"><i class="fa fa-fw fa-usd"></i></span></h5>
                 <div class="progress w3-light" style="height:3px;">
                   <div class="progress-bar w3-success" style="width:55%;height:3px;"></div>
                 </div>
-                <p>Total Revenue <span class="w3-right">+1.2% ↑</span></p>
+                <p>
+                  Total Today 
+                  {% if todays_sum > yesterdays_sum %}
+                  <span class="w3-right">
+                    + % ↑ 
+                  </span>
+                  {% else %}
+                  <span class="w3-right">- % ↓</span>
+                  {% endif %}
+                </p>
+              </div>
+            </div>
+
+            <div class="w3-col l3 w3-container w3-border-right">
+              <div class="w3-padding">
+                <h5>{{ total_sales | floatformat:"2g" }} <span class="w3-right"><i class="fa fa-fw fa-usd"></i></span></h5>
+                <div class="progress w3-light" style="height:3px;">
+                  <div class="progress-bar w3-success" style="width:55%;height:3px;"></div>
+                </div>
+                <p>total sales <span class="w3-right">+1.2% ↑</span></p>
               </div>
             </div>
             <div class="w3-col l3 w3-container w3-border-right">
@@ -131,7 +142,7 @@
                 <div class="progress w3-light" style="height:3px;">
                   <div class="progress-bar w3-warning" style="width:55%;height:3px;"></div>
                 </div>
-                <p>Visitors <span class="w3-right">+5.2% ↑</span></p>
+                <p>unpaid debts <span class="w3-right">+5.2% ↑</span></p>
               </div>
             </div>
             <div class="w3-col l3 w3-container">
@@ -140,7 +151,7 @@
                 <div class="progress w3-light" style="height:3px;">
                   <div class="progress-bar w3-danger" style="width:55%;height:3px;"></div>
                 </div>
-                <p>Messages <span class="w3-right">+2.2% ↑</span></p>
+                <p>total expenses <span class="w3-right">+2.2% ↑</span></p>
               </div>
             </div>
           </div>
@@ -210,7 +221,7 @@
           </div>
         </div>
         <div class="w3-white w3-round w3-margin-bottom w3-border" style="">
-          <header class="w3-padding-large w3-large w3-border-bottom" style="font-weight: 500">Recent Order Tables</header>
+          <header class="w3-padding-large w3-large w3-border-bottom" style="font-weight: 500">Today's Services</header>
           <div class="w3-responsive">
             {% if all_data %}
             <table class="w3-table w3-bordered">
@@ -227,7 +238,7 @@
                   <i class="fa fa-image w3-opacity w3-margin-left"></i>
                 </td> -->
                 <td>{{ data.service }}</td>
-                <td>ksh {{data.price }}</td>
+                <td>ksh {{data.price | floatformat:"2g" }}</td>
                 <td>
                   <span class="badge-dot">
                     <i class="w3-danger"></i> pending </span>
