@@ -23,4 +23,4 @@ urlpatterns = [
     path("finlogger/", include("finlogger.urls")),
     path('cyber/', include("cyber.urls"),)
     # path('inventory/', include("inventory.urls"))
-] + static(setting.STATIC_URL, document_root=settings.STATIC_ROOT)
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
