@@ -59,13 +59,37 @@ def cyber_dash_summury(request):
 
     if todays_sum > yesterdays_sum:
         print("+")
+
+    # all sercices for the day
     all_services = Service.objects.filter(
         date__date = todays_date)
+
+    # last 30 days daily sum for graphing
+    last_30_days = datetime.datetime.today() - timedelta(30)
+    report = Service.objects.filter(
+        date__gte=last_30_days).extra(
+            {'day':'date(date)'}
+        ).values('day').annotate(count=Sum('price'))
+
+    date_labels = []
+    date_sums = []
+
+    for key in report:
+        print(key['day'], ': ', key['count'])
+        date_labels.append(key['day'])
+        date_sums.append(key['count'])
+
+    # print(report)
     context = {
         'todays_sum': todays_sum,
-        'total_sales': total_sales,
-        'all_data': all_services,
         'yesterdays_sum': yesterdays_sum,
+        'total_sales': total_sales,
+        # all services for the day to be in a table
+        'all_data': all_services,
+        # daily sums for graphing
+        'date_labels': date_labels,
+        'date_sums': date_sums,
+        
     }
     return render(request, 'cyber_dash_summury.html', context=context)
 
