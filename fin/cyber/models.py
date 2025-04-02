@@ -1,27 +1,26 @@
 from django.db import models
 
-service_choices = {
-    "printing" : "Printing",
-    "photocopy" : "Photocopy",
-    "scanning" : "Scanning",
-    "kra" : "KRA",
-    "SHA / SHIF" : "SHA/SHIF",
-    "emails": "mail services",
-    "browsing": "Browsing",
-    "passports" : "Passport Photo",
-    "ntsa" : "NTSA",
-    "HELB" : "HELB",
-    "Sale" : "Sales",
-    "lamination" : "Lamination",
-    "typsetting" : "Typesetting",
-    "songs" : "Songs",
-    "tse": "TSE",
-    "mpesa statements" : "M-pesa statements",
-    "pension" : "Pension",
+service_choices = [
+    ("printing", "Printing"),
+    ("photocopy","Photocopy")
+    # "scanning" : "Scanning",
+    # "kra" : "KRA",
+    # "SHA / SHIF" : "SHA/SHIF",
+    # "emails": "mail services",
+    # "browsing": "Browsing",
+    # "passports" : "Passport Photo",
+    # "ntsa" : "NTSA",
+    # "HELB" : "HELB",
+    # "Sale" : "Sales",
+    # "lamination" : "Lamination",
+    # "typsetting" : "Typesetting",
+    # "songs" : "Songs",
+    # "tse": "TSE",
+    # "mpesa statements" : "M-pesa statements",
+    # "pension" : "Pension",
+    # "others": "others",
 
-    "others": "others",
-
-}
+]
 
 class Service(models.Model):
     service = models.CharField(max_length=100, choices=service_choices)
