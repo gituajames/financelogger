@@ -6,7 +6,7 @@ from datetime import timezone, timedelta
 
 from django.db.models import Count, Sum
 
-from .models import Service
+from .models import Service, Expenses
 
 from .forms import ServiceForm
 
@@ -41,7 +41,11 @@ def cyber_dash_summury(request):
     todays_sum = Service.objects.filter(
         date__date = todays_date
     ).aggregate(todays_total_sum=Sum('price'))['todays_total_sum']
-    print('todays totals ',todays_sum)
+
+    unpaid_debts = Service.objects.filter(
+        paid_status = False
+    ).aggregate(unpaid_debts_sum=Sum('price'))['unpaid_debts_sum']
+    print('depts ',unpaid_debts)
     
     yesterdays_sum = Service.objects.filter(
         date__date = yesterdays_date
@@ -50,6 +54,9 @@ def cyber_dash_summury(request):
     total_sales = Service.objects.all().aggregate(total_sales=Sum('price'))['total_sales']
     print('yesterdays totals ',yesterdays_sum)
 
+    # sum of all the expenses
+    total_expenses = Expenses.objects.all().aggregate(total_expenses=Sum('price'))['total_expenses']
+
     # crude way to convert none to int for comparison
     if yesterdays_sum == None:
         # print(yesterdays_sum)
@@ -57,9 +64,7 @@ def cyber_dash_summury(request):
     if todays_sum == None:
         todays_sum = 0
 
-    if todays_sum > yesterdays_sum:
-        print("+")
-
+    percentage_change = abs((yesterdays_sum - todays_sum))
     # all sercices for the day
     all_services = Service.objects.filter(
         date__date = todays_date)
@@ -83,12 +88,21 @@ def cyber_dash_summury(request):
     context = {
         'todays_sum': todays_sum,
         'yesterdays_sum': yesterdays_sum,
+
+        # percentage change
+        'percentage_change' : percentage_change,
         'total_sales': total_sales,
         # all services for the day to be in a table
         'all_data': all_services,
         # daily sums for graphing
         'date_labels': date_labels,
         'date_sums': date_sums,
+
+        # unpaid debt sums
+        'unpaid_debts': unpaid_debts,
+
+        # expenses
+        'total_expenses': total_expenses,
         
     }
     return render(request, 'cyber_dash_summury.html', context=context)

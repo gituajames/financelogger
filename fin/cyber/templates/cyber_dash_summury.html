@@ -123,10 +123,10 @@
                   Total Today 
                   {% if todays_sum > yesterdays_sum %}
                   <span class="w3-right">
-                    + % ↑ 
+                    + {{ percentage_change }} % ↑ 
                   </span>
                   {% else %}
-                  <span class="w3-right">- % ↓</span>
+                  <span class="w3-right">- {{ percentage_change }} % ↓</span>
                   {% endif %}
                 </p>
               </div>
@@ -143,7 +143,7 @@
             </div>
             <div class="w3-col l3 w3-container w3-border-right">
               <div class="w3-padding">
-                <h5>6200 <span class="w3-right"><i class="fa fa-fw fa-eye"></i></span></h5>
+                <h5>{{ unpaid_debts | floatformat:"2g" }} <span class="w3-right"><i class="fa fa-fw fa-eye"></i></span></h5>
                 <div class="progress w3-light" style="height:3px;">
                   <div class="progress-bar w3-warning" style="width:55%;height:3px;"></div>
                 </div>
@@ -152,7 +152,7 @@
             </div>
             <div class="w3-col l3 w3-container">
               <div class="w3-padding">
-                <h5>5630 <span class="w3-right"><i class="fa fa-fw fa-envira"></i></span></h5>
+                <h5>{{ total_expenses | floatformat:"2g" }} <span class="w3-right"><i class="fa fa-fw fa-envira"></i></span></h5>
                 <div class="progress w3-light" style="height:3px;">
                   <div class="progress-bar w3-danger" style="width:55%;height:3px;"></div>
                 </div>
