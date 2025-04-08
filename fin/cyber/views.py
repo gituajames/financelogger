@@ -32,16 +32,23 @@ def service_upload_form(request):
 
 def cyber_dash_summury(request):
 
+    print("______")
+    print(datetime.datetime.now().month)
+    print("________")
+    
+
     todays_date = datetime.datetime.today()
     yesterdays_date = todays_date - timedelta(days = 1)
     print(yesterdays_date)
     # utc_time = dt.replace(tzinfo=timezone.utc)
     # utc_timestamp = utc_time.timestamp()
 
+    # current date daily sum
     todays_sum = Service.objects.filter(
         date__date = todays_date
     ).aggregate(todays_total_sum=Sum('price'))['todays_total_sum']
 
+    # sum of all unpaid for sales and services
     unpaid_debts = Service.objects.filter(
         paid_status = False
     ).aggregate(unpaid_debts_sum=Sum('price'))['unpaid_debts_sum']
@@ -70,7 +77,8 @@ def cyber_dash_summury(request):
         date__date = todays_date)
 
     # last 30 days daily sum for graphing
-    last_30_days = datetime.datetime.today() - timedelta(30)
+    print(datetime.datetime.now().day)
+    last_30_days = (datetime.datetime.now() - timedelta(datetime.datetime.now().day)) + timedelta(1)
     report = Service.objects.filter(
         date__gte=last_30_days).extra(
             {'day':'date(date)'}
@@ -80,9 +88,20 @@ def cyber_dash_summury(request):
     date_sums = []
 
     for key in report:
-        print(key['day'], ': ', key['count'])
+        # print(key['day'], ': ', key['count'])
         date_labels.append(key['day'])
         date_sums.append(key['count'])
+
+
+    # all_expenses = Expenses.objects.all().annotate(all_expenses=Sum('price'))['all_expenses']
+
+    # expense_labels = []
+    # exppense_sums = []
+
+    # for key in all_expenses:
+        # print(key['day'], ': ', key['count'])
+        # date_labels.append(key['day'])
+        # date_sums.append(key['count'])
 
     # print(report)
     context = {
