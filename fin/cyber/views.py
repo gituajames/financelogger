@@ -76,6 +76,15 @@ def cyber_dash_summury(request):
     # sum of all the expenses
     total_expenses = Expenses.objects.all().aggregate(total_expenses=Sum('price'))['total_expenses']
 
+    # monthly total expenses
+    monthly_total_expenses = Expenses.objects.filter(
+        date_created__gte = last_30_days
+    ).aggregate(monthly_expenses=Sum('price'))['monthly_expenses']
+    print('monthly expenses', monthly_total_expenses)
+
+    # revenue less expenses
+    monthly_revenue = monthly_total_sales - monthly_total_expenses
+
     # sum of all unpaid for sales and services
     unpaid_debts = Service.objects.filter(
         paid_status = False
@@ -115,6 +124,10 @@ def cyber_dash_summury(request):
 
         # unpaid debt sums
         'unpaid_debts': unpaid_debts,
+
+        # monthly revenue
+        'monthly_revenue': monthly_revenue,
+        'monthly_expenses': monthly_total_expenses,
 
         # expenses
         'total_expenses': total_expenses,
