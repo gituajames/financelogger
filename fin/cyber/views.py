@@ -32,38 +32,20 @@ def service_upload_form(request):
 
 def cyber_dash_summury(request):
 
-    print("______")
-    print(datetime.datetime.now().month)
-    print("________")
-    
-
     todays_date = datetime.datetime.today()
     yesterdays_date = todays_date - timedelta(days = 1)
-    print(yesterdays_date)
-    # utc_time = dt.replace(tzinfo=timezone.utc)
-    # utc_timestamp = utc_time.timestamp()
+    last_30_days = (datetime.datetime.now() - timedelta(datetime.datetime.now().day)) + timedelta(1)
 
-    # current date daily sum
+    # sum of the day
     todays_sum = Service.objects.filter(
         date__date = todays_date
     ).aggregate(todays_total_sum=Sum('price'))['todays_total_sum']
 
-    # sum of all unpaid for sales and services
-    unpaid_debts = Service.objects.filter(
-        paid_status = False
-    ).aggregate(unpaid_debts_sum=Sum('price'))['unpaid_debts_sum']
-    print('depts ',unpaid_debts)
-    
+    # sum of previous date
     yesterdays_sum = Service.objects.filter(
         date__date = yesterdays_date
     ).aggregate(yesterdays_total_sum=Sum('price'))['yesterdays_total_sum'] # evaluates to none
     
-    total_sales = Service.objects.all().aggregate(total_sales=Sum('price'))['total_sales']
-    print('yesterdays totals ',yesterdays_sum)
-
-    # sum of all the expenses
-    total_expenses = Expenses.objects.all().aggregate(total_expenses=Sum('price'))['total_expenses']
-
     # crude way to convert none to int for comparison
     if yesterdays_sum == None:
         # print(yesterdays_sum)
@@ -71,14 +53,39 @@ def cyber_dash_summury(request):
     if todays_sum == None:
         todays_sum = 0
 
+    # previous day and current difference # should turn in to a percentage
+    # but 1st solve division by 0 error
+    # in cases where previous sales was 0 
     percentage_change = abs((yesterdays_sum - todays_sum))
+
+
     # all sercices for the day
     all_services = Service.objects.filter(
         date__date = todays_date)
+    
+    # monthly total sales
+    monthly_total_sales = Service.objects.filter(
+        date__gte = last_30_days
+    ).aggregate(sale=Sum('price'))['sale']
+    print('month sales', monthly_total_sales)
+
+    # total sales 
+    total_sales = Service.objects.all().aggregate(total_sales=Sum('price'))['total_sales']
+    print('yesterdays totals ',yesterdays_sum)
+
+    # sum of all the expenses
+    total_expenses = Expenses.objects.all().aggregate(total_expenses=Sum('price'))['total_expenses']
+
+    # sum of all unpaid for sales and services
+    unpaid_debts = Service.objects.filter(
+        paid_status = False
+    ).aggregate(unpaid_debts_sum=Sum('price'))['unpaid_debts_sum']
+    print('depts ',unpaid_debts)
+
 
     # last 30 days daily sum for graphing
-    print(datetime.datetime.now().day)
-    last_30_days = (datetime.datetime.now() - timedelta(datetime.datetime.now().day)) + timedelta(1)
+    # monthly summury
+    # last_30_days = (datetime.datetime.now() - timedelta(datetime.datetime.now().day)) + timedelta(1)
     report = Service.objects.filter(
         date__gte=last_30_days).extra(
             {'day':'date(date)'}
@@ -93,24 +100,13 @@ def cyber_dash_summury(request):
         date_sums.append(key['count'])
 
 
-    # all_expenses = Expenses.objects.all().annotate(all_expenses=Sum('price'))['all_expenses']
-
-    # expense_labels = []
-    # exppense_sums = []
-
-    # for key in all_expenses:
-        # print(key['day'], ': ', key['count'])
-        # date_labels.append(key['day'])
-        # date_sums.append(key['count'])
-
-    # print(report)
     context = {
         'todays_sum': todays_sum,
         'yesterdays_sum': yesterdays_sum,
 
         # percentage change
         'percentage_change' : percentage_change,
-        'total_sales': total_sales,
+        'total_sales': monthly_total_sales,
         # all services for the day to be in a table
         'all_data': all_services,
         # daily sums for graphing
@@ -125,6 +121,7 @@ def cyber_dash_summury(request):
         
     }
     return render(request, 'cyber_dash_summury.html', context=context)
+
 
 
 # Create your views here.
