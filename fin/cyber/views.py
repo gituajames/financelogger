@@ -6,7 +6,7 @@ from datetime import timezone, timedelta
 
 from django.db.models import Count, Sum
 
-from .models import Service, Expenses
+from .models import Service, Expenses, Product
 
 from .forms import ServiceForm
 
@@ -67,11 +67,10 @@ def cyber_dash_summury(request):
     monthly_total_sales = Service.objects.filter(
         date__gte = last_30_days
     ).aggregate(sale=Sum('price'))['sale']
-    print('month sales', monthly_total_sales)
+    # print('month sales', monthly_total_sales)
 
     # total sales 
     total_sales = Service.objects.all().aggregate(total_sales=Sum('price'))['total_sales']
-    print('yesterdays totals ',yesterdays_sum)
 
     # sum of all the expenses
     total_expenses = Expenses.objects.all().aggregate(total_expenses=Sum('price'))['total_expenses']
@@ -80,16 +79,18 @@ def cyber_dash_summury(request):
     monthly_total_expenses = Expenses.objects.filter(
         date_created__gte = last_30_days
     ).aggregate(monthly_expenses=Sum('price'))['monthly_expenses']
-    print('monthly expenses', monthly_total_expenses)
 
     # revenue less expenses
+    if monthly_total_sales == None:
+        monthly_total_sales = 0
+    if monthly_total_expenses == None:
+        monthly_total_expenses = 0
     monthly_revenue = monthly_total_sales - monthly_total_expenses
 
     # sum of all unpaid for sales and services
     unpaid_debts = Service.objects.filter(
         paid_status = False
     ).aggregate(unpaid_debts_sum=Sum('price'))['unpaid_debts_sum']
-    print('depts ',unpaid_debts)
 
 
     # last 30 days daily sum for graphing
@@ -118,6 +119,7 @@ def cyber_dash_summury(request):
         'total_sales': monthly_total_sales,
         # all services for the day to be in a table
         'all_data': all_services,
+        
         # daily sums for graphing
         'date_labels': date_labels,
         'date_sums': date_sums,
@@ -136,5 +138,21 @@ def cyber_dash_summury(request):
     return render(request, 'cyber_dash_summury.html', context=context)
 
 
+def inventory(request):
+    page_title = "cyber inventory"
+    all_products = Product.objects.all()
 
-# Create your views here.
+    context = {
+        'all_products': all_products,
+        'page_title': page_title,
+    }
+    return render(request, 'inventory.html', context=context)
+
+def tables(request):
+    todays_services = Service.objects.filter(
+        date__date = todays_date)
+
+    context = {
+        'todays_services' : todays_services
+    }
+    return render(request, 'tables.html', context=context)

@@ -1,22 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>daily sums</title>
-</head>
-<body>
-    {% if all_data %}
-    {% for data in all_data %}
-    <h1>{{ data.service }}</h1><br>
-    <p>this was provided for {{ data.price }} ksh, this was the count {{data.count}}</p><br>
-    <p>{{data.date}}</p>
-    {% endfor %}
-    {% else %}
-    <p>no records</p>
-    {% endif %}
-</body>
-</html> -->
 {% load static %}
 <!DOCTYPE html>
 <!-- <html lang="en" dir="ltr"> -->
@@ -88,7 +69,7 @@
         <a href="/cyber/cyber_dash_summury" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
           <i class="fa fa-fw fa-bar-chart"></i>&nbsp; Dashboard </a>
         <a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
-          <i class="fa fa-fw fa-fire"></i>&nbsp; UI Icons </a>
+          <i class="fa fa-fw fa-fire"></i>&nbsp; Inventory </a>
         <a href="/cyber/service_upload_form" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
           <i class="fa fa-fw fa-edit"></i>&nbsp; Service Forms </a>
         <a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
@@ -134,11 +115,15 @@
 
             <div class="w3-col l3 w3-container w3-border-right">
               <div class="w3-padding">
+                {% if total_sale %}
                 <h5>{{ total_sales | floatformat:"2g" }} <span class="w3-right"><i class="fa fa-fw fa-usd"></i></span></h5>
+                {% else %}
+                <h5> 0 <span class="w3-right"><i class="fa fa-fw fa-usd"></i></span></h5>
                 <div class="progress w3-light" style="height:3px;">
                   <div class="progress-bar w3-success" style="width:55%;height:3px;"></div>
                 </div>
                 <p>Monthly Sales <span class="w3-right">+1.2% ↑</span></p>
+                {% endif %}
               </div>
             </div>
             <div class="w3-col l3 w3-container w3-border-right">
@@ -152,11 +137,15 @@
             </div>
             <div class="w3-col l3 w3-container">
               <div class="w3-padding">
+                {% if monthly_expenses %}
                 <h5>{{ monthly_expenses | floatformat:"2g" }} <span class="w3-right"><i class="fa fa-fw fa-envira"></i></span></h5>
+                {% else %}
+                <h5>0<span class="w3-right"><i class="fa fa-fw fa-envira"></i></span></h5>
                 <div class="progress w3-light" style="height:3px;">
                   <div class="progress-bar w3-danger" style="width:55%;height:3px;"></div>
                 </div>
                 <p>Monthly Expenses <span class="w3-right">+2.2% ↑</span></p>
+                {% endif %}
               </div>
             </div>
           </div>
