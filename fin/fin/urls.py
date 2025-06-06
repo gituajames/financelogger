@@ -19,9 +19,10 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("finlogger/", include("finlogger.urls")),
-    path('cyber/', include("cyber.urls"),)
+    path('cyber/', include("cyber.urls"),),
     # path('inventory/', include("inventory.urls"))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

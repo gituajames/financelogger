@@ -1,12 +1,16 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
+# serializers imports
+from rest_framework import viewsets
+from . serializers import MobileBankingMessageSerializer
+
 import datetime
 from datetime import timezone, timedelta
 
 from django.db.models import Count, Sum
 
-from .models import Service, Expenses, Product
+from .models import Service, Expenses, Product, Mobile_banking_messages
 
 from .forms import ServiceForm
 
@@ -156,3 +160,10 @@ def tables(request):
         'todays_services' : todays_services
     }
     return render(request, 'tables.html', context=context)
+
+
+# mobile banking serializer
+
+class MobileBankingMessageViewSet(viewsets.ModelViewSet):
+    queryset = Mobile_banking_messages.objects.all()
+    serializer_class = MobileBankingMessageSerializer

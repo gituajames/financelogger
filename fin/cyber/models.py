@@ -41,6 +41,7 @@ mode_of_payment_choices = [
 
 class Mobile_banking_messages(models.Model):
     mobile_bank_message = models.CharField(max_length=1000)
+    mobile_bank_message_upload_date = models.DateTimeField(auto_now=True)
 
 class Service(models.Model):
     service = models.CharField(max_length=100, choices=service_choices)
