@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Service, Expenses, Stock, Product
+from .models import Service, Expenses, Stock, Product, Mobile_banking_messages
 
 
 @admin.register(Service)
@@ -23,5 +23,8 @@ class ProductAdmin(admin.ModelAdmin):
         'product_quantity'
         )
 
+@admin.register(Mobile_banking_messages)
+class MobileBankingMessage(admin.ModelAdmin):
+    list_display = ['mobile_bank_message']
 
 # Register your models here.

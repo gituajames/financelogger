@@ -36,6 +36,9 @@ def service_upload_form(request):
 
 def cyber_dash_summury(request):
 
+    # mobile banking messages
+    mobile_banking_messages = Mobile_banking_messages.objects.all()
+
     todays_date = datetime.datetime.today()
     yesterdays_date = todays_date - timedelta(days = 1)
     last_30_days = (datetime.datetime.now() - timedelta(datetime.datetime.now().day)) + timedelta(1)
@@ -138,8 +141,17 @@ def cyber_dash_summury(request):
         # expenses
         'total_expenses': total_expenses,
         
+        # mobile banking messages
+        'messages' : mobile_banking_messages
     }
     return render(request, 'cyber_dash_summury.html', context=context)
+
+def mbankingmessages(request):
+    all_messages = Mobile_banking_messages.objects.all()
+    context = {
+        'messages' : all_messages
+    }
+    return render(request, 'mbankingmessages.html', context=context)
 
 
 def inventory(request):

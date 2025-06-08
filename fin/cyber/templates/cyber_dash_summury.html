@@ -44,7 +44,17 @@
           <input type="text" class="w3-input w3-border w3-round w3-small w3-padding-small w3-gray-lighter w3-show-inline-block" placeholder="Enter keywords">
         </div>
         <div class="w3-right">
-          <button type="button" class="w3-button w3-large w3-opacity-min"><i class="fa fa-envelope-open"></i></button>
+          {% if messages %}
+          {% with messages|length as count %}
+          <button type="button" class="w3-button w3-large w3-opacity-min">
+          <i class="fa fa-envelope-open">
+            <a href="/cyber/mbankingmessage">{{ count }}</a>
+          </i>
+        </button>
+          {% endwith %}
+          {% else %}
+          <button type="button" class="w3-button w3-large w3-opacity-min">0<i class="fa fa-envelope-open"></i></button>
+          {% endif %}
           <button type="button" class="w3-button w3-large w3-opacity-min"><i class="fa fa-bell"></i></button>
         </div>
         <div class="text-right">
@@ -78,8 +88,8 @@
           <i class="fa fa-fw fa-user-circle"></i>&nbsp; Profile </a>
         <a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
           <i class="fa fa-fw fa-lock"></i>&nbsp; Login </a>
-        <a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
-          <i class="fa fa-fw fa-sign-in"></i>&nbsp; Registration </a>
+        <a href="/cyber/mbankingmessage" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
+          <i class="fa fa-fw fa-sign-in"></i>&nbsp; Mobile Messages </a>
         <span class="w3-bar-item w3-padding w3-small w3-opacity"> LABELS </span>
         <a href="#dashboard" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
           <i class="fa fa-fw fa-coffee w3-text-danger"></i>&nbsp; Important </a>
